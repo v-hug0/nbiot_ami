@@ -66,7 +66,7 @@ def _next_invoke_id() -> int:
 
 
 # Mapa de IP → serial do medidor (preenchido quando N1/N2 chega com serial)
-_ip_to_serial: dict[str, str] = {}
+_ip_to_serial = {}   # type: dict — IP → serial do medidor
 
 
 def _identify_meter(addr: tuple, decoded) -> str:

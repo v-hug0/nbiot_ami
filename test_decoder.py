@@ -242,7 +242,7 @@ def test_downstream_builders():
 # ---------------------------------------------------------------------------
 # Teste 4: Envio UDP contra o servidor (opcional, requer servidor rodando)
 # ---------------------------------------------------------------------------
-def test_udp_send(host: str = "127.0.0.1", port: int = 4059):
+def test_udp_send(host: str = "137.131.194.1", port: int = 4059):
     print(f"\n--- Teste 4: Envio UDP para {host}:{port} ---")
     OBIS_SERIAL = (0, 0, 96,  1,  0, 255)
     OBIS_VOL    = (7, 0,  3,  0,  0, 255)

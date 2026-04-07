@@ -381,9 +381,15 @@ def _parse_data_notification(buf: Buffer, dec: DecodedApdu):
 
 
 def _parse_get_response(buf: Buffer, dec: DecodedApdu):
+    """
+    GET-Response-Normal (tag 0xC4 01).
+    O simulador monta o body como array de capture objects (mesmo
+    formato do Data-Notification), então usa _parse_capture_list
+    para extrair OBIS codes individuais com seus valores.
+    """
     if buf.remaining < 5:
         return
-    buf.read_u8()   # sub-type
+    buf.read_u8()   # sub-type (01 = Normal)
     dec.invoke_id = buf.read_u32()
     if buf.remaining < 1:
         return
@@ -393,11 +399,20 @@ def _parse_get_response(buf: Buffer, dec: DecodedApdu):
         dec.errors.append(f"GET-Response error 0x{code:02X}")
         return
     if buf.remaining > 0:
-        val = _decode_value(buf)
-        dec.objects.append(ObisValue(
-            obis=(0,)*6, name="GET-Response", description="Dado retornado",
-            raw=val, scaled=None,
-        ))
+        objects = _parse_capture_list(buf)
+        if objects:
+            dec.objects.extend(objects)
+        else:
+            # Fallback: armazena valor bruto (formato não-capture-list)
+            try:
+                buf2 = Buffer(buf.read(buf.remaining))
+                val = _decode_value(buf2)
+                dec.objects.append(ObisValue(
+                    obis=(0,)*6, name="GET-Response",
+                    description="Dado retornado", raw=val, scaled=None,
+                ))
+            except Exception:
+                pass
 
 
 def _parse_get_request(buf: Buffer, dec: DecodedApdu):

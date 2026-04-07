@@ -127,7 +127,7 @@ def _store_reading(meter_id: str, addr: tuple, decoded):
 # ---------------------------------------------------------------------------
 # Thread UDP
 # ---------------------------------------------------------------------------
-_udp_sock: socket.socket | None = None
+_udp_sock = None  # type: socket.socket
 
 
 def _udp_thread(host: str, port: int):

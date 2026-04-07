@@ -218,6 +218,7 @@ def _decode_value(buf: Buffer) -> Any:
     if tag == 0x12: return buf.read_u16()
     if tag == 0x14: return buf.read_i64()
     if tag == 0x15: return buf.read_u64()
+    if tag == 0x16: return buf.read_u8()    # enum (IEC 62056-62) — mesmo encoding que uint8
     if tag == 0x17: return buf.read_f32()
     if tag == 0x18: return buf.read_f64()
     if tag == 0x19: return _decode_datetime(buf)
